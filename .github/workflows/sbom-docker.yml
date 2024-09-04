@@ -24,11 +24,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Install CycloneDX CLI
-      run: npm install -g @cyclonedx/bom
+    - name: Install CycloneDX CLI locally
+      run: npm install @cyclonedx/bom
 
     - name: Generate SBOM for JavaScript project
-      run: cyclonedx-bom -o sbom-project.json
+      run: ./node_modules/.bin/cyclonedx-bom -o sbom-project.json
 
     - name: Build Docker image
       run: docker build -t my-node-app:latest .
