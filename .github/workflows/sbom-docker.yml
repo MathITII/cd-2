@@ -24,20 +24,18 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Install CycloneDX CLI
+      run: npm install -g @cyclonedx/bom
+
     - name: Generate SBOM for JavaScript project
-      uses: CycloneDX/cyclonedx-github-action@master
-      with:
-        output-format: 'json'
-        sbom-filename: 'sbom-project.json'
+      run: cyclonedx-bom -o sbom-project.json
 
     - name: Build Docker image
-      run: |
-        docker build -t my-node-app:latest .
+      run: docker build -t my-node-app:latest .
 
     - name: Install Syft
       run: |
         curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
 
     - name: Generate SBOM for Docker image
-      run: |
-        syft docker:my-node-app:latest -o json > sbom-image.json
+      run: syft docker:my-node-app:latest -o json > sbom-image.json
